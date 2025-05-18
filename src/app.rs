@@ -1,6 +1,5 @@
 use crate::error_template::{AppError, ErrorTemplate};
 use leptos::error::Errors;
-use leptos::logging::log;
 use leptos::prelude::*;
 use leptos_meta::*;
 use leptos_router::{components::*, path};
@@ -28,8 +27,6 @@ pub fn shell(options: LeptosOptions) -> impl IntoView {
 #[instrument]
 #[component]
 pub fn App() -> impl IntoView {
-    log!("App");
-
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
 
