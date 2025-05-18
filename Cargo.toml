@@ -1,5 +1,5 @@
 [package]
-name = "{{project-name}}"
+name = "projectname"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,40 +7,39 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-axum = { version = "0.7", optional = true }
+axum = { version = "0.8.3", optional = true }
 console_error_panic_hook = "0.1"
 console_log = "1"
 cfg-if = "1"
-leptos = { version = "0.6", features = ["nightly"] }
-leptos_axum = { version = "0.6", optional = true }
-leptos_meta = { version = "0.6", features = ["nightly"] }
-leptos_router = { version = "0.6", features = ["nightly"] }
+leptos = { version = "0.8.2", features = ["nightly"] }
+leptos_axum = { version = "0.8.2", optional = true }
+leptos_meta = { version = "0.8.2" }
+leptos_router = { version = "0.8.2" }
 log = "0.4"
 simple_logger = "5"
-tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
+tokio = { version = "1.44.2", features = ["rt-multi-thread"], optional = true }
 tower = { version = "0.5", features = ["util"], optional = true }
-tower-http = { version = "0.5", features = ["fs"], optional = true }
-wasm-bindgen = "=0.2.93"
-thiserror = "1"
-tracing = { version = "0.1.37", optional = true }
+tower-http = { version = "0.6.2", features = ["fs"], optional = true }
+wasm-bindgen = "=0.2.100"
+thiserror = "2"
+tracing = { version = "0.1.37" }
 http = "1"
-axum-aws-lambda = { version = "0.8", optional = true }
-lambda_http = { version = "0.13", optional = true }
+axum-aws-lambda = { version = "0.10", optional = true }
+lambda_http = { version = "0.14", optional = true }
 
 [features]
-hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
+hydrate = ["leptos/hydrate"]
 ssr = [
-  "dep:axum",
-  "dep:tokio",
-  "dep:tower",
-  "dep:tower-http",
-  "dep:leptos_axum",
-  "leptos/ssr",
-  "leptos_meta/ssr",
-  "leptos_router/ssr",
-  "dep:tracing",
-  "dep:axum-aws-lambda",
-  "dep:lambda_http",
+    "dep:axum",
+    "dep:tokio",
+    "dep:tower",
+    "dep:tower-http",
+    "dep:leptos_axum",
+    "leptos/ssr",
+    "leptos_meta/ssr",
+    "leptos_router/ssr",
+    "dep:axum-aws-lambda",
+    "dep:lambda_http",
 ]
 
 # Defines a size-optimized profile for the WASM bundle in release mode
@@ -65,7 +64,7 @@ opt-level = 2
 [package.metadata.lambda.deploy]
 # Leptos generally doesn't take more than a few hundred milliseconds even with a cold start
 timeout = 3
-env = { LEPTOS_ENV = "PROD", LEPTOS_OUTPUT_NAME = "{{project-name}}", LEPTOS_SITE_ROOT = "target/site", LEPTOS_SITE_PKG_DIR = "pkg" }
+env = { LEPTOS_ENV = "PROD", LEPTOS_OUTPUT_NAME = "lambda1", LEPTOS_SITE_ROOT = "target/site", LEPTOS_SITE_PKG_DIR = "pkg" }
 
 [package.metadata.leptos]
 # Since we'll be testing without --release, we'll set up a dev profile to allow some optimization
@@ -73,7 +72,7 @@ bin-profile-dev = "server-dev"
 lib-profile-dev = "wasm-dev"
 
 # The name used by wasm-bindgen/cargo-leptos for the JS/WASM bundle. Defaults to the crate name
-output-name = "{{project-name}}"
+output-name = "projectname"
 
 # The site root folder is where cargo-leptos generate all output. WARNING: all content of this folder will be erased on a rebuild. Use it in your server setup.
 site-root = "target/site"

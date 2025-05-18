@@ -2,9 +2,10 @@
 #[tokio::main]
 async fn main() {
     use axum::{routing::post, Router};
-    use leptos::*;
-    use leptos_axum::{generate_route_list, LeptosRoutes};
-    use {{project-name}}::{app::*, fileserv::file_and_error_handler};
+    use leptos::logging;
+    use leptos::prelude::*;
+    use leptos_axum::{file_and_error_handler, generate_route_list, LeptosRoutes};
+    use projectname::app::*;
 
     simple_logger::init_with_level(log::Level::Debug).expect("couldn't initialize logging");
 
@@ -13,18 +14,22 @@ async fn main() {
     // <https://github.com/leptos-rs/start-axum#executing-a-server-on-a-remote-machine-without-the-toolchain>
     // Alternately a file can be specified such as Some("Cargo.toml")
     // The file would need to be included with the executable when moved to deployment
-    let conf = get_configuration(None).await.unwrap();
+    let conf = get_configuration(None).unwrap();
     let leptos_options = conf.leptos_options;
     // We don't use an address for the lambda function
     #[allow(unused_variables)]
     let addr = leptos_options.site_addr;
     let routes = generate_route_list(App);
+    dbg!(&routes);
 
     // build our application with a route
     let app = Router::new()
-        .route("/api/*fn_name", post(leptos_axum::handle_server_fns))
-        .leptos_routes(&leptos_options, routes, App)
-        .fallback(file_and_error_handler)
+        .route("/api/{*fn_name}", post(leptos_axum::handle_server_fns))
+        .leptos_routes(&leptos_options, routes, {
+            let leptos_options = leptos_options.clone();
+            move || shell(leptos_options.clone())
+        })
+        .fallback(file_and_error_handler(shell))
         .with_state(leptos_options);
 
     // In development, we use the Hyper server

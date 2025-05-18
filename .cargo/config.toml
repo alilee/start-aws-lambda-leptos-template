@@ -1,0 +1,3 @@
+[build]
+# workaround for zig build issue
+rustflags = ["-Zlinker-features=-lld"]
